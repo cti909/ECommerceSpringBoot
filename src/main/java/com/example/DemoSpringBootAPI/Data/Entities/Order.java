@@ -2,8 +2,9 @@ package com.example.DemoSpringBootAPI.Data.Entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-import com.example.DemoSpringBootAPI.Data.EntityEnum.UserRole;
+import com.example.DemoSpringBootAPI.Data.EntityEnum.ProductSize;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,10 +14,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,31 +28,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-//@Builder
-@Table(name = "users")
-public class User {
-    @Id
+@Table(name = "orders")
+public class Order {
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false, unique = true)
-    private String username;
-
+    private String description;
+    
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+    private String address;
 
     @Column(nullable = false)
     private String phoneNumber;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.USER;
     
     @Column(nullable = false)
     private Boolean isDeleted = false;
@@ -62,18 +53,10 @@ public class User {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     // ----------Related-----------
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Cart> carts;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteProduct> favoriteProducts;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
+    private User user;
 }

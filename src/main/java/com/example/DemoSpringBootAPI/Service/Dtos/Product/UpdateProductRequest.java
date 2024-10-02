@@ -20,6 +20,8 @@ public class UpdateProductRequest {
 	private String name;
     private String description;
     private Integer quantity;
+    private Long starTotal;
+    private Long reviewTotal;
     private Long priceOrigin;
     private Long pricePromotion;
     private LocalDateTime dateExpire;

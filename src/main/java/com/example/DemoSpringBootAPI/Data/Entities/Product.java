@@ -43,6 +43,14 @@ public class Product {
     
     @Column(nullable = false)
     private Integer quantity;
+    
+    @Column(nullable = false)
+    private Long starTotal;
+    
+    @Column(nullable = false)
+    private Long reviewTotal;
+    
+    // starAverage = starTotal/reviewTotal -- process in FE
 
     @Column(nullable = false)
     private Long priceOrigin;
@@ -81,6 +89,9 @@ public class Product {
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductColor> productColors;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
 
     @ManyToOne
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)

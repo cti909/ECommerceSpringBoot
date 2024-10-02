@@ -26,6 +26,8 @@ public class ProductResponse
     private String name;
     private String description;
     private Integer quantity;
+    private Long starTotal;
+    private Long reviewTotal; // starAverage = starTotal/reviewTotal
     private Long priceOrigin;
     private Long pricePromotion;
     private LocalDateTime dateExpire;
