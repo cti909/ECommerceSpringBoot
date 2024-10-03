@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateCommentRequest {
-	private Long id;
 	private String content;
-	private String star;
+	private Integer star;
+	private Boolean isReview;
 	private Boolean isDeleted;
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

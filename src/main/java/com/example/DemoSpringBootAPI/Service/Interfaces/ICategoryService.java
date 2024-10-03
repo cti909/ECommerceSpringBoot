@@ -2,7 +2,6 @@ package com.example.DemoSpringBootAPI.Service.Interfaces;
 
 import java.util.List;
 
-import com.example.DemoSpringBootAPI.Service.Dtos.Pagination.PaginationRequest;
 import com.example.DemoSpringBootAPI.Service.Dtos.Category.CategoryResponse;
 import com.example.DemoSpringBootAPI.Service.Dtos.Category.CreateCategoryRequest;
 import com.example.DemoSpringBootAPI.Service.Dtos.Category.UpdateCategoryRequest;

@@ -2,15 +2,10 @@ package com.example.DemoSpringBootAPI.Data.Entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
-import com.example.DemoSpringBootAPI.Data.EntityEnum.ProductSize;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,16 +35,16 @@ public class Product {
 
     @Column(nullable = false)
     private String description;
-    
+
     @Column(nullable = false)
     private Integer quantity;
-    
+
     @Column(nullable = false)
     private Long starTotal;
-    
+
     @Column(nullable = false)
     private Long reviewTotal;
-    
+
     // starAverage = starTotal/reviewTotal -- process in FE
 
     @Column(nullable = false)
@@ -61,13 +56,13 @@ public class Product {
     @Column(nullable = false)
     private LocalDateTime dateExpire;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "json")
     private String listUrlImage;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "json")
 //    @Enumerated(EnumType.STRING)
     private String productSize;
-    
+
     @Column(nullable = false)
     private Boolean isDeleted = false;
 
@@ -86,10 +81,10 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteProduct> favoriteProducts;
-    
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductColor> productColors;
-    
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
 

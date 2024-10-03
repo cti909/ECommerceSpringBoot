@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -57,7 +56,7 @@ public class CartService implements ICartService
     	Cart cart = cartRepository.findById(id).orElse(null);
     	return cart != null ? modelMapper.map(cart, CartRelatedResponse.class) : null;
     }
-    
+
     @Override
     public PaginationResponse<CartRelatedResponse> getCartsByUser(Long userId, PaginationRequest paginationRequest) {
         Pageable pageable = PageRequest.of(
@@ -71,9 +70,10 @@ public class CartService implements ICartService
             .collect(Collectors.toList());
         return new PaginationResponse<>(
             cartRelatedResponses,
-            cartPage.getNumber() + 1, 
-            cartPage.getTotalPages(), 
-            cartPage.getTotalElements() 
+            cartPage.getNumber() + 1,
+            cartPage.getTotalPages(),
+            cartPage.getTotalElements(),
+            cartPage.getSize()
         );
     }
 

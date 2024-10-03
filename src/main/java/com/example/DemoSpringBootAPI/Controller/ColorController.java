@@ -1,7 +1,6 @@
 package com.example.DemoSpringBootAPI.Controller;
 
-import java.util.List;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,54 +26,54 @@ public class ColorController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ColorResponse>> getAllColors() {
+	public ResponseEntity<?> getAllColors() {
 		try {
 			var Colors = colorService.getAllColors();
 			return ResponseEntity.ok(Colors);
 		} catch (Exception ex) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ColorResponse> getColorById(@PathVariable("id") Long id) {
+	public ResponseEntity<?> getColorById(@PathVariable("id") Long id) {
 		try {
 			var Color = colorService.getColorById(id);
 			return ResponseEntity.ok(Color);
 		} catch (Exception ex) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PostMapping
-	public ResponseEntity<ColorResponse> createColor(@RequestBody CreateColorRequest createColor) {
+	public ResponseEntity<?> createColor(@RequestBody CreateColorRequest createColor) {
 		try {
 			var Color = colorService.createColor(createColor);
 			return ResponseEntity.ok(Color);
 		} catch (Exception ex) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ColorResponse> updateColor(@PathVariable("id") Long id,
+	public ResponseEntity<?> updateColor(@PathVariable("id") Long id,
 			@RequestBody UpdateColorRequest updateColorRequest) {
 		try {
 			ColorResponse updatedColor = colorService.updateColor(id, updateColorRequest);
 			return ResponseEntity.ok(updatedColor);
 		} catch (Exception ex) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteColor(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteColor(@PathVariable("id") Long id) {
 		try {
 			colorService.deleteColor(id);
 			return ResponseEntity.noContent().build();
 		} catch (Exception ex) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 }

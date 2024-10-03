@@ -104,8 +104,9 @@ public class CategoryService implements ICategoryService
             Category category = optionalCategory.get();
             category.setIsDeleted(true);
             categoryRepository.save(category);
+        } else {        	
+        	throw new RuntimeException("Category not found with id: " + id);
         }
-        throw new RuntimeException("Category not found with id: " + id);
     }
 
 }

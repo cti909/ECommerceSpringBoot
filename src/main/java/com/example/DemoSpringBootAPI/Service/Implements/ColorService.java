@@ -88,7 +88,8 @@ public class ColorService implements IColorService
             Color color = optionalColor.get();
             color.setIsDeleted(true);
             colorRepository.save(color);
+        } else {
+        	throw new RuntimeException("Color not found with id: " + id);        	
         }
-        throw new RuntimeException("Color not found with id: " + id);
     }
 }

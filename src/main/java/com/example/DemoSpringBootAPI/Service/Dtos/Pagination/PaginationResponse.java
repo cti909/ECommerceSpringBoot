@@ -16,4 +16,5 @@ public class PaginationResponse<T> {
     private int currentPage;
     private int totalPages;
     private long totalItems;
+    private int pageSize;
 }

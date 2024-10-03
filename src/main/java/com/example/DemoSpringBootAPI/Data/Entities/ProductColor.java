@@ -1,16 +1,11 @@
 package com.example.DemoSpringBootAPI.Data.Entities;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +27,7 @@ public class ProductColor {
     @ManyToOne
     @JoinColumn(name = "productId", referencedColumnName = "id", nullable = false)
     private Product product;
-    
+
     @ManyToOne
     @JoinColumn(name = "colorId", referencedColumnName = "id", nullable = false)
     private Color color;

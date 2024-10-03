@@ -2,7 +2,6 @@ package com.example.DemoSpringBootAPI.Controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.DemoSpringBootAPI.Service.Dtos.User.CreateUserRequest;
 import com.example.DemoSpringBootAPI.Service.Dtos.User.RegisterUserRequest;
 import com.example.DemoSpringBootAPI.Service.Dtos.User.UserResponse;
-import com.example.DemoSpringBootAPI.Service.Implements.UserService;
 import com.example.DemoSpringBootAPI.Service.Interfaces.IUserService;
 
 @RestController

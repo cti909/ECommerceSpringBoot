@@ -2,8 +2,6 @@ package com.example.DemoSpringBootAPI.Service.Interfaces;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-
 import com.example.DemoSpringBootAPI.Service.Dtos.Cart.CartRelatedResponse;
 import com.example.DemoSpringBootAPI.Service.Dtos.Cart.CreateCartRequest;
 import com.example.DemoSpringBootAPI.Service.Dtos.Cart.UpdateCartRequest;

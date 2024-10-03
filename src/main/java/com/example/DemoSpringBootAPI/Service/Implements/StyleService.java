@@ -85,7 +85,8 @@ public class StyleService implements IStyleService{
             Style style = optionalStyle.get();
             style.setIsDeleted(true);
             styleRepository.save(style);
+        } else {        	
+        	throw new RuntimeException("Style not found with id: " + id);
         }
-        throw new RuntimeException("Style not found with id: " + id);
     }
 }

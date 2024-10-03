@@ -2,8 +2,6 @@ package com.example.DemoSpringBootAPI.Data.Entities;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +29,7 @@ public class Cart {
 
     @Column(nullable = false)
     private Integer quantity;
-    
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -43,7 +41,7 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "productId", referencedColumnName = "id", nullable = false)
     private Product product;
-    
+
 //    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)

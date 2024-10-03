@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,21 +19,21 @@ import com.example.DemoSpringBootAPI.Data.Entities.Product;
 import com.example.DemoSpringBootAPI.Data.Entities.ProductColor;
 import com.example.DemoSpringBootAPI.Data.Entities.Style;
 import com.example.DemoSpringBootAPI.Data.Entities.User;
-import com.example.DemoSpringBootAPI.Data.EntityEnum.ProductSize;
 import com.example.DemoSpringBootAPI.Repository.CategoryRepository;
 import com.example.DemoSpringBootAPI.Repository.ColorRepository;
 import com.example.DemoSpringBootAPI.Repository.ProductColorRepository;
 import com.example.DemoSpringBootAPI.Repository.ProductRepository;
 import com.example.DemoSpringBootAPI.Repository.StyleRepository;
 import com.example.DemoSpringBootAPI.Repository.UserRepository;
+import com.example.DemoSpringBootAPI.Service.Dtos.Comment.CommentRelatedResponse;
+import com.example.DemoSpringBootAPI.Service.Dtos.Pagination.PaginationResponse;
 import com.example.DemoSpringBootAPI.Service.Dtos.Product.CreateProductRequest;
-import com.example.DemoSpringBootAPI.Service.Dtos.Product.UpdateProductRequest;
+import com.example.DemoSpringBootAPI.Service.Dtos.Product.ProductFilterRequest;
 import com.example.DemoSpringBootAPI.Service.Dtos.Product.ProductResponse;
+import com.example.DemoSpringBootAPI.Service.Dtos.Product.UpdateProductRequest;
 import com.example.DemoSpringBootAPI.Service.Interfaces.IProductService;
 import com.example.DemoSpringBootAPI.Utils.UploadPhoto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jakarta.persistence.OneToMany;
 
 @Service
 public class ProductService implements IProductService
@@ -44,7 +47,7 @@ public class ProductService implements IProductService
 	private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public ProductService(ProductRepository productRepository, ModelMapper modelMapper, StyleRepository styleRepository, UserRepository userRepository, ProductColorRepository productColorRepository, CategoryRepository categoryRepository, ColorRepository colorRepository) 
+    public ProductService(ProductRepository productRepository, ModelMapper modelMapper, StyleRepository styleRepository, UserRepository userRepository, ProductColorRepository productColorRepository, CategoryRepository categoryRepository, ColorRepository colorRepository)
     {
         this.productRepository = productRepository;
 		this.categoryRepository = categoryRepository;
@@ -56,7 +59,7 @@ public class ProductService implements IProductService
     }
 
     @Override
-    public List<ProductResponse> getAllProducts() 
+    public List<ProductResponse> getAllProducts()
     {
         return productRepository.findAll().stream()
         		 .map(product -> modelMapper.map(product, ProductResponse.class))
@@ -64,7 +67,40 @@ public class ProductService implements IProductService
     }
     
     @Override
-    public ProductResponse getProductById(Long id) 
+    public PaginationResponse<ProductResponse> filterProducts(ProductFilterRequest filterRequest) {
+    	Pageable pageable = PageRequest.of(filterRequest.getPaginationRequest().getPage() - 1,
+                                               filterRequest.getPaginationRequest().getPageSize());
+
+        Page<Product> productPage = productRepository.filterProducts(
+                filterRequest.getCategoryId(),
+                filterRequest.getColorId(),
+                filterRequest.getSize(),
+                filterRequest.getPriceMin(),
+                filterRequest.getPriceMax(),
+                filterRequest.getStyleId(),
+                pageable
+        );
+        
+//        List<ProductResponse> products = productPage.getContent().stream()
+//        		.map(product -> modelMapper.map(product, ProductResponse.class))
+//                .collect(Collectors.toList());
+//
+////        List<ProductResponse> products = productPage.getContent();
+        List<ProductResponse> productResponses = productPage.stream()
+                .map(product -> modelMapper.map(product, ProductResponse.class))
+                .collect(Collectors.toList());
+
+        return new PaginationResponse<>(
+                productResponses,
+                productPage.getNumber() + 1,
+                productPage.getTotalPages(),
+                productPage.getTotalElements(),
+                productPage.getSize()
+        );
+    }
+
+    @Override
+    public ProductResponse getProductById(Long id)
     {
     	Product product = productRepository.findById(id).orElse(null);
     	return product != null ? modelMapper.map(product, ProductResponse.class) : null;
@@ -72,18 +108,19 @@ public class ProductService implements IProductService
 
     @Override
     @Transactional
-    public ProductResponse createProduct(CreateProductRequest createProduct, List<MultipartFile> listUrlImage) 
+    public ProductResponse createProduct(CreateProductRequest createProduct, List<MultipartFile> listUrlImage)
     {
-    	
+
     	Product product = new Product();
     	product.setName(createProduct.getName());
     	product.setDescription(createProduct.getDescription());
+    	product.setQuantity(createProduct.getQuantity());
     	product.setStarTotal(createProduct.getStarTotal());
     	product.setReviewTotal(createProduct.getReviewTotal());
     	product.setPriceOrigin(createProduct.getPriceOrigin());
     	product.setPricePromotion(createProduct.getPricePromotion());
     	product.setDateExpire(createProduct.getDateExpire());
-    	
+
     	// set string ProductSizes and convert XXL -> 2XL XXXL-> 3XL ...
     	List<String> productSizeValues = createProduct.getProductSizes().stream()
                 .map(size -> size.getValue())
@@ -95,7 +132,7 @@ public class ProductService implements IProductService
     	} catch (Exception e) {
     	    throw new RuntimeException("Error converting product sizes to JSON.");
     	}
-    	
+
     	// upload
     	UploadPhoto.createUploadDirectory(uploadDirectory);
     	List<String> fileUrls = UploadPhoto.uploadFiles(listUrlImage, uploadDirectory);
@@ -106,7 +143,7 @@ public class ProductService implements IProductService
             e.printStackTrace();
             throw new RuntimeException("Error convert link image to Json.");
         }
-    	
+
     	Category category = categoryRepository.findById(createProduct.getCategoryId())
     			.orElseThrow(() -> new RuntimeException("Category not found with id: " + createProduct.getCategoryId()));
         Style style = styleRepository.findById(createProduct.getStyleId())
@@ -116,8 +153,8 @@ public class ProductService implements IProductService
         product.setCategory(category);
         product.setStyle(style);
         product.setUser(user);
-        
-    	
+
+
     	// Use relate in entity @OneToMany -> save
         List<ProductColor> productColors = createProduct.getColorIds().stream()
                 .map(colorId -> {
@@ -128,9 +165,9 @@ public class ProductService implements IProductService
                 .collect(Collectors.toList());
 
         product.setProductColors(productColors);
-    	
+
 		Product productCreated = productRepository.save(product);
-		
+
 //		// create productColor - for in query
 //		List<Long> colorIds = createProduct.getColorId();
 //	    if (colorIds != null && !colorIds.isEmpty()) {
@@ -145,15 +182,15 @@ public class ProductService implements IProductService
 //	            }
 //	        }
 //	    }
-        
+
 		return productCreated != null ? modelMapper.map(productCreated, ProductResponse.class) : null;
     }
-    
+
     @Override
     @Transactional
     public ProductResponse updateProduct(Long id, UpdateProductRequest updateProductRequest) throws NoSuchFieldException, IllegalAccessException {
         Optional<Product> optionalProduct = productRepository.findById(id);
-        
+
         if (optionalProduct.isPresent()) {
             Product entity = optionalProduct.get();
 
@@ -161,7 +198,7 @@ public class ProductService implements IProductService
             for (Field field : fields) {
                 field.setAccessible(true); // access private fields
                 Object newValue = field.get(updateProductRequest);
-                
+
                 if (newValue != null) {
                     Field entityField = entity.getClass().getDeclaredField(field.getName());
                     entityField.setAccessible(true);
@@ -175,7 +212,7 @@ public class ProductService implements IProductService
         }
     }
     @Override
-    public void deleteProduct(Long id) 
+    public void deleteProduct(Long id)
     {
 //        productRepository.deleteById(id);
     	Optional<Product> optionalProduct = productRepository.findById(id);
@@ -183,7 +220,7 @@ public class ProductService implements IProductService
             Product product = optionalProduct.get();
             product.setIsDeleted(true);
             productRepository.save(product);
-        } else {        	
+        } else {
         	throw new RuntimeException("Product not found with id: " + id);
         }
     }

@@ -1,6 +1,11 @@
 package com.example.DemoSpringBootAPI.Service.Dtos.User;
 
-public class LoginRequest 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class LoginRequest
 {
 	private String username;
     private String password;

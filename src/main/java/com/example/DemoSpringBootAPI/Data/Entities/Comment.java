@@ -34,8 +34,11 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false, unique = true)
-    private String star;
+    @Column(nullable = false)
+    private Integer star; // 1 2 3 4 5
+    
+    @Column(nullable = false)
+    private Boolean isReview = true;
     
     @Column(nullable = false)
     private Boolean isDeleted = false;

@@ -1,17 +1,8 @@
 package com.example.DemoSpringBootAPI.Service.Dtos.Product;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import com.example.DemoSpringBootAPI.Data.Entities.Cart;
-import com.example.DemoSpringBootAPI.Data.Entities.Comment;
-import com.example.DemoSpringBootAPI.Data.Entities.FavoriteProduct;
-import com.example.DemoSpringBootAPI.Data.Entities.ProductColor;
-import com.example.DemoSpringBootAPI.Data.EntityEnum.ProductSize;
-import com.example.DemoSpringBootAPI.Data.EntityEnum.UserRole;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +11,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponse 
+public class ProductResponse
 {
 	private Long id;
     private String name;

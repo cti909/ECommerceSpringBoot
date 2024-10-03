@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.example.DemoSpringBootAPI.Data.EntityEnum.UserRole;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse 
+public class UserResponse
 {
 	private Long id;
     private String name;
