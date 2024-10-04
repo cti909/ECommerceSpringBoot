@@ -31,7 +31,7 @@ CREATE TABLE `product_colors` (
   KEY `FKqhu7cqni31911lmvx4fqmiw65` (`product_id`),
   CONSTRAINT `FKb9e4okm5xhksf4up2ltc8gxv0` FOREIGN KEY (`color_id`) REFERENCES `colors` (`id`),
   CONSTRAINT `FKqhu7cqni31911lmvx4fqmiw65` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `product_colors` (
 
 LOCK TABLES `product_colors` WRITE;
 /*!40000 ALTER TABLE `product_colors` DISABLE KEYS */;
-INSERT INTO `product_colors` VALUES (11,1,5),(12,1,6),(13,3,6),(14,1,7),(15,2,7);
+INSERT INTO `product_colors` VALUES (11,1,5),(12,1,6),(13,3,6),(14,1,7),(15,2,7),(16,1,8);
 /*!40000 ALTER TABLE `product_colors` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-02 22:54:03
+-- Dump completed on 2024-10-04  9:58:45
